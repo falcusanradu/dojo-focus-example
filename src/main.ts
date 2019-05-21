@@ -8,10 +8,15 @@ import '@dojo/themes/dojo/index.css';
 
 import routes from './routes';
 import App from './App';
+import Store from '@dojo/framework/stores/Store';
+import { AppState } from './interfaces/interfaces';
+
+const MyStore = new Store<AppState>();
 
 const registry = new Registry();
 registerRouterInjector(routes, registry);
 registerThemeInjector(dojo, registry);
+registry.defineInjector('app-state', () => () => MyStore);
 
 const r = renderer(() => w(App, {}));
 r.mount({ registry });
