@@ -11,30 +11,35 @@ export interface ModalDialogProperties extends WidgetProperties {
 }
 
 export default class ModalDialog extends WidgetBase<ModalDialogProperties> {
-	protected render() {
+    protected render() {
         const { onRequestClose } = this.properties;
         let { open } = this.properties;
-		return w(Dialog, {
+        return w(Dialog, {
             ...dialogProperties,
             open,
             onRequestClose: () => {
                 onRequestClose();
             }
         }, [
-                v('div', {}, [
+                v('div', { id: 'btn-wrapper' }, [
                     w(Button, {
                         focus: () => true
                     }, [
                             'Button should be focused!'
+                        ]),
+                    w(Button, {
+                    }, [
+                            'Button should not be focused!'
                         ])
                 ])
             ]);
-	}
+    }
 }
 
 const dialogProperties = {
-	closeable: true,
-	modal: true,
-	title: 'Dirty State Modal Dialog',
-	underlay: true,
+    key: 'modal-dialog',
+    closeable: true,
+    modal: true,
+    title: 'Dirty State Modal Dialog',
+    underlay: true,
 }

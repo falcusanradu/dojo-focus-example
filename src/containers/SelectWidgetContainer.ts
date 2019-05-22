@@ -10,25 +10,31 @@ export const SelectWidgetContainer = StoreContainer<AppState>(SelectWidget, 'app
 
     paths: [['dirtyState']],
     getProperties(store: Store<AppState>): MyWidgetProperties {
+        
         const { get, path } = store;
-        const isdirtyState = get(path('dirtyState'));
+        let isdirtyState = get(path('dirtyState'));
+        // init dirtyState if undefined
+        if (isdirtyState === undefined) {
+            setDirtyStateProcess(store)(true);
+            isdirtyState = get(path('dirtyState'));
+        }
         return {
             options,
             onOptionChange: () => {
                 // every 2 clicks dirty state is generated!
-                setDirtyStateProcess(store)(!isdirtyState);
-                if (!isdirtyState && dirtyStateCount % 2 === 0) {
+                if (!isdirtyState) {
                     // do something
                     options.reverse();
+                    // set dirtyState
+                    setDirtyStateProcess(store)(true);
+                    isdirtyState = get(path('dirtyState'));
                 } else {
                     // open modalDialog process
                     openModalProcess(store)(true);
+                    let btnWrapper = document.getElementById('btn-wrapper');
+                    console.log('btnWrapper', btnWrapper);
                 }
-                dirtyStateCount++;
             }
         }
     }
 });
-
-// used to count the dirtyState
-let dirtyStateCount = 0;

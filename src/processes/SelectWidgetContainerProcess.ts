@@ -6,8 +6,7 @@ const commandFactory = createCommandFactory<AppState>();
 
 
 const setDirtyStateCommand = commandFactory<Boolean>(({ path, payload }) => {
-    console.log('setDirtyStateCommand: ', payload);
     return [replace(path('dirtyState'), payload)];
 });
 
-export const setDirtyStateProcess = createProcess('set-diry-state', [setDirtyStateCommand]);
+export const setDirtyStateProcess = createProcess('set-dirty-state', [setDirtyStateCommand]);
