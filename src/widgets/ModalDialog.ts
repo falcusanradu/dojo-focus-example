@@ -4,41 +4,48 @@ import { v, w } from '@dojo/framework/widget-core/d';
 import { WidgetProperties } from '@dojo/framework/widget-core/interfaces';
 import Dialog from '@dojo/widgets/dialog';
 import Button from '@dojo/widgets/button';
+import { DirtyStateConfirmation } from '../interfaces/interfaces';
 
 export interface ModalDialogProperties extends WidgetProperties {
-    open: boolean;
-    onRequestClose: () => void;
+    open?: boolean;
+    confirmation?: DirtyStateConfirmation;
+    positiveConfirmation: (payload: {}) => void;
+    negativeConfirmation: (payload: {}) => void;
 }
 
 export default class ModalDialog extends WidgetBase<ModalDialogProperties> {
     protected render() {
-        const { onRequestClose } = this.properties;
-        let { open } = this.properties;
-        return w(Dialog, {
+        const { confirmation, positiveConfirmation, negativeConfirmation } = this.properties;
+        let toReturn;
+        confirmation ? toReturn = w(Dialog, {
             ...dialogProperties,
-            open,
-            onRequestClose: () => {
-                onRequestClose();
-            }
+            open: true
         }, [
                 v('div', { id: 'btn-wrapper' }, [
                     w(Button, {
-                        focus: () => true
+                        focus: () => true,
+                        onClick: () => {
+                            positiveConfirmation({});
+                        }
                     }, [
-                            'Button should be focused!'
+                            'Do stuff!'
                         ]),
                     w(Button, {
+                        onClick: () => {
+                            negativeConfirmation({});
+                        }
                     }, [
-                            'Button should not be focused!'
+                            'Cancel'
                         ])
                 ])
-            ]);
+            ]) : toReturn = null;
+        return toReturn;
     }
 }
 
 const dialogProperties = {
     key: 'modal-dialog',
-    closeable: true,
+    closeable: false,
     modal: true,
     title: 'Dirty State Modal Dialog',
     underlay: true,
