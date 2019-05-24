@@ -23,6 +23,10 @@ export default class ModalDialog extends WidgetBase<ModalDialogProperties> {
         }, [
                 v('div', { id: 'btn-wrapper' }, [
                     w(Button, {
+                    }, [
+                            'first btn'
+                        ]),
+                    w(Button, {
                         focus: () => true,
                         onClick: () => {
                             positiveConfirmation({});
